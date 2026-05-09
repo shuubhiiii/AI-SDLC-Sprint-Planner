@@ -11,7 +11,7 @@ services:
         value: 3.11.9
       - key: ALLOWED_ORIGINS
         sync: false
-      - key: GOOGLE_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
       - key: OPENAI_API_KEY
         sync: false
