@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-900 text-slate-100 font-sans antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(58,99,255,0.18), transparent 40%),
+    radial-gradient(circle at 80% 0%,  rgba(168,85,247,0.15), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(34,211,238,0.10), transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Reusable component classes */
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
+  }
+  .card {
+    @apply glass p-6 shadow-glow;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition;
+  }
+  .btn-primary {
+    @apply btn bg-brand-500 hover:bg-brand-400 text-white shadow-lg shadow-brand-500/30;
+  }
+  .btn-ghost {
+    @apply btn bg-white/5 hover:bg-white/10 text-slate-100 border border-white/10;
+  }
+  .chip {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-slate-200;
+  }
+  .section-title {
+    @apply text-xl font-semibold text-white;
+  }
+  .muted {
+    @apply text-slate-400;
+  }
+}
+
+/* Subtle animated gradient border for hero */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute; inset: 0;
+  padding: 1px; border-radius: 1rem;
+  background: linear-gradient(135deg, #3a63ff, #a855f7, #22d3ee);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
