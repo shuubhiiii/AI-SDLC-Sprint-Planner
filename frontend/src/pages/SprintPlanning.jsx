@@ -10,6 +10,14 @@ import {
 
 
 
+  ChevronDown,
+
+
+
+  ChevronUp,
+
+
+
   CheckCircle2,
 
 
@@ -68,11 +76,15 @@ import Card from '../components/Card.jsx';
 
 import { updateSprint } from '../services/api.js';
 
-function SprintCard({ sprint, index, projectId, onUpdated }) {
+function SprintCard({ sprint, index, projectId, onUpdated, doneCount = 0, defaultExpanded = false }) {
 
 
 
   const [editing, setEditing] = useState(false);
+
+
+
+  const [expanded, setExpanded] = useState(defaultExpanded);
 
 
 
@@ -345,125 +357,86 @@ function SprintCard({ sprint, index, projectId, onUpdated }) {
 
 
   if (!editing) {
-
-
+    const total = (sprint.tasks || []).length;
+    const pct = total ? Math.round((doneCount / total) * 100) : 0;
+    const accents = [
+      'from-brand-500 to-fuchsia-500',
+      'from-fuchsia-500 to-pink-500',
+      'from-cyan-500 to-brand-500',
+      'from-emerald-500 to-cyan-500',
+      'from-amber-500 to-rose-500',
+    ];
+    const accent = accents[index % accents.length];
 
     return (
-
-
-
-      <Card
-
-
-
-        title={`${sprint.name} · ${sprint.duration_weeks || 2} weeks`}
-
-
-
-        icon={CalendarRange}
-
-
-
-      >
-
-
-
-        <div className="flex items-start justify-between gap-3 -mt-2 mb-3">
-
-
-
-          <div className="flex-1">
-
-
-
-            <div className="text-sm text-brand-200 mb-1">Goal</div>
-
-
-
-            <p className="text-slate-200 text-sm">{sprint.goal}</p>
-
-
-
+      <section className="card !p-0 overflow-hidden">
+        {/* Compact header */}
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.02] transition"
+        >
+          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${accent} grid place-items-center text-white font-bold text-sm shrink-0 shadow-md`}>
+            {index + 1}
           </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-sm truncate">{sprint.name}</div>
+            <div className="flex items-center gap-2 mt-1 text-xs text-slate-400 flex-wrap">
+              <span>{sprint.duration_weeks || 2}w</span>
+              <span className="text-slate-600">·</span>
+              <span>{total} task{total === 1 ? '' : 's'}</span>
+              {doneCount > 0 && (
+                <>
+                  <span className="text-slate-600">·</span>
+                  <span className="text-emerald-300">{doneCount}/{total} done</span>
+                </>
+              )}
+            </div>
+            {/* Mini progress bar */}
+            <div className="mt-2 h-1 rounded-full bg-white/5 overflow-hidden">
+              <div
+                className={`h-full bg-gradient-to-r ${accent} transition-all`}
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          </div>
+          <span className="text-slate-400 shrink-0">
+            {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </span>
+        </button>
 
-
-
-          <button
-
-
-
-            type="button"
-
-
-
-            onClick={startEdit}
-
-
-
-            className="btn-ghost !px-3 !py-1.5 text-xs shrink-0"
-
-
-
-          >
-
-
-
-            <Pencil size={14} /> Edit
-
-
-
-          </button>
-
-
-
-        </div>
-
-
-
-        <div className="text-sm text-brand-200 mb-2">Tasks</div>
-
-
-
-        <ul className="space-y-1.5 text-sm">
-
-
-
-          {(sprint.tasks || []).map((t, i) => (
-
-
-
-            <li key={i} className="flex items-start gap-2">
-
-
-
-              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-brand-400 shrink-0" />
-
-
-
-              <span>{t}</span>
-
-
-
-            </li>
-
-
-
-          ))}
-
-
-
-        </ul>
-
-
-
-      </Card>
-
-
-
+        {/* Expanded body */}
+        {expanded && (
+          <div className="px-4 pb-4 pt-1 border-t border-white/5">
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex-1">
+                <div className="text-[11px] uppercase tracking-wider text-slate-400 mb-1">Goal</div>
+                <p className="text-slate-200 text-sm">{sprint.goal}</p>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  startEdit();
+                }}
+                className="btn-ghost !px-3 !py-1.5 text-xs shrink-0"
+              >
+                <Pencil size={14} /> Edit
+              </button>
+            </div>
+            <div className="text-[11px] uppercase tracking-wider text-slate-400 mb-2">Tasks</div>
+            <ul className="space-y-1.5 text-sm">
+              {(sprint.tasks || []).map((tk, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-brand-400 shrink-0" />
+                  <span className="text-slate-200">{tk}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
     );
-
-
-
   }
 
 
@@ -1185,7 +1158,7 @@ export default function SprintPlanning() {
 
 
 
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="space-y-3 max-w-3xl">
 
 
 
@@ -1210,6 +1183,14 @@ export default function SprintPlanning() {
 
 
             projectId={live.id}
+
+
+
+            doneCount={Object.keys((live.progress || {})[String(i)] || {}).length}
+
+
+
+            defaultExpanded={i === 0}
 
 
 

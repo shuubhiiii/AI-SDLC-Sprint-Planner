@@ -431,13 +431,13 @@ export default function Results() {
 
         <Card title={`Timeline · ${plan.timeline.total_weeks} weeks`} icon={CalendarRange}>
 
-          <div className="relative pl-4 border-l border-white/10 space-y-4">
+          <div className="relative pl-6 border-l border-white/10 space-y-4 ml-2">
 
             {(plan.timeline.milestones || []).map((m, i) => (
 
               <div key={i} className="relative">
 
-                <span className="absolute -left-[9px] top-1.5 w-3 h-3 rounded-full bg-brand-400 ring-4 ring-brand-400/20" />
+                <span className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-brand-400 ring-4 ring-brand-400/20" />
 
                 <div className="text-xs text-brand-300">Week {m.week}</div>
 
