@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Sparkles,
   ListChecks,
-  MessageSquare,
   Cpu,
   Sliders,
   CalendarRange,
@@ -18,7 +17,6 @@ const items = [
   { to: '/dashboard', label: 'Dashboard',   icon: LayoutDashboard },
   { to: '/new',       label: 'New Project', icon: Sparkles },
   { to: '/results',   label: 'AI Results',  icon: ListChecks },
-  { to: '/ask',       label: 'Ask AI',      icon: MessageSquare },
 ];
 
 const PROJECT_VIEWS = [

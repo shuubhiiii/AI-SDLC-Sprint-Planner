@@ -9,7 +9,6 @@ import SprintPlanning from './pages/SprintPlanning.jsx';
 import RisksTesting from './pages/RisksTesting.jsx';
 import Customize from './pages/Customize.jsx';
 import Execution from './pages/Execution.jsx';
-import AskAI from './pages/AskAI.jsx';
 
 function AppShell({ children }) {
   return (
@@ -50,7 +49,6 @@ export default function App() {
         <Route path="/customize/:id" element={<Customize />} />
         <Route path="/execution" element={<Execution />} />
         <Route path="/execution/:id" element={<Execution />} />
-        <Route path="/ask" element={<AskAI />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppShell>
